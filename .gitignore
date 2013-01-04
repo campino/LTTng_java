@@ -18,5 +18,3 @@
 
 # build dir
 build/**
-# IDE project files
-nbproject/**
