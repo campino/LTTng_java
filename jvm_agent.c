@@ -22,7 +22,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	jint res = (*vm)->GetEnv(vm, (void **)&jvmti, JVMTI_VERSION_1_0);
     if (res != JNI_OK) {
 		fprintf("ERROR: Unable to access jvmti.");
-		abort();
+		return -1;
 	}
 
 	// ask for the capabilities
@@ -49,6 +49,8 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	error = (*jvmti)->SetEventNotificationMode(jvmti, JVMTI_ENABLE,
 			  JVMTI_EVENT_METHOD_EXIT, (jthread)NULL);
 	CHECK_JVMTI_ERROR(error, "Could not register exit callback");
+
+	return 0;
 }
 
 JNIEXPORT void JNICALL Agent_OnUnload(JavaVM *vm) {
