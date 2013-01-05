@@ -15,11 +15,11 @@
 
 	TRACEPOINT_EVENT(java_ust, method_entry,
 			TP_ARGS(char *, clazz, char *, method),
-			TP_FIELDS(ctf_string(method, name)))
+			TP_FIELDS(ctf_string(clazz, clazz),ctf_string(method, method)))
 
 	TRACEPOINT_EVENT(java_ust, method_exit,
 			TP_ARGS(char *, clazz, char *, method),
-			TP_FIELDS(ctf_string(method, name)))
+			TP_FIELDS(ctf_string(clazz, clazz),ctf_string(method, method)))
 
 #endif /* _TRACEPOINT_JAVA_UST_H */
 
