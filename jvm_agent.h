@@ -45,6 +45,9 @@ extern "C" {
 
 #endif	/* JVM_AGENT_H */
 
+#undef TRACEPOINT_INCLUDE
+#define TRACEPOINT_INCLUDE "./jvm_agent.h"
+
 #include <lttng/tracepoint-event.h>
 
 #ifdef	__cplusplus
