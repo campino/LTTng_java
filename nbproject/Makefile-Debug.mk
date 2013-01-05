@@ -51,7 +51,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=`pkg-config --libs lttng-ust`  
+LDLIBSOPTIONS=-ldl -llttng-ust
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -64,7 +64,7 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libLTTng_java.so: ${OBJECTFILES}
 ${OBJECTDIR}/jvm_agent.o: jvm_agent.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.9.x86_64/include -I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.9.x86_64/include/linux -I/usr/lib/jvm/java-7-openjdk-amd64/include `pkg-config --cflags lttng-ust`    -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/jvm_agent.o jvm_agent.c
+	$(COMPILE.c) -g -I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.9.x86_64/include -I/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.9.x86_64/include/linux -I/usr/lib/jvm/java-7-openjdk-amd64/include -fPIC  -MMD -MP -MF $@.d -o ${OBJECTDIR}/jvm_agent.o jvm_agent.c
 
 # Subprojects
 .build-subprojects:
