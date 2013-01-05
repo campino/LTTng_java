@@ -14,12 +14,12 @@
 #include <lttng/tracepoint.h>
 
 	TRACEPOINT_EVENT(java_ust, method_entry,
-			TP_ARGS(char *, clazz, char *, method),
+			TP_ARGS(unsigned char *, clazz, unsigned char *, method),
 			TP_FIELDS(ctf_string(clazz, clazz)
 						ctf_string(method, method)))
 
 	TRACEPOINT_EVENT(java_ust, method_exit,
-			TP_ARGS(char *, clazz, char *, method),
+			TP_ARGS(unsigned char *, clazz, unsigned char *, method),
 			TP_FIELDS(ctf_string(clazz, clazz)
 						ctf_string(method, method)))
 

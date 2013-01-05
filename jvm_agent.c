@@ -9,7 +9,7 @@ inline void CHECK_JVMTI_ERROR(jvmtiError error, const char *message) {
 	switch(error) {
 		case JVMTI_ERROR_NONE: return;
 		default: {
-			printf("jvmti error: %d\n", error);
+			fprintf(stderr, "jvmti error: %d\n", error);
 			abort();
 		}
 	}
@@ -21,7 +21,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	// get jvmti
 	jint res = (*vm)->GetEnv(vm, (void **)&jvmti, JVMTI_VERSION_1_0);
     if (res != JNI_OK) {
-		fprintf("ERROR: Unable to access jvmti.");
+		fprintf(stderr, "ERROR: Unable to access jvmti.");
 		return -1;
 	}
 
@@ -65,16 +65,16 @@ void JNICALL cbMethodEntry(jvmtiEnv *jvmti_env,
 	jvmtiError error = (*jvmti_env)->GetMethodDeclaringClass(jvmti_env, method, &declaring);
 	CHECK_JVMTI_ERROR(error, "Could not get declaring class.");
 
-	char *decName;
+	unsigned char *decName;
 	error= (*jvmti_env)->GetClassSignature(jvmti_env, declaring, &decName, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get class signature.");
 
-	char *name;
+	unsigned char *name;
 	error = (*jvmti_env)->GetMethodName(jvmti_env, method, &name, NULL, NULL);
 
 	tracepoint(java_ust, method_entry, decName, name);
-	(*jvmti_env)->Deallocate(name);
-	(*jvmti_env)->Deallocate(decName);
+	(*jvmti_env)->Deallocate(jvmti_env, name);
+	(*jvmti_env)->Deallocate(jvmti_env, decName);
 }
 
 void JNICALL cbMethodExit(jvmtiEnv *jvmti_env,
@@ -87,15 +87,15 @@ void JNICALL cbMethodExit(jvmtiEnv *jvmti_env,
 	jvmtiError error = (*jvmti_env)->GetMethodDeclaringClass(jvmti_env, method, &declaring);
 	CHECK_JVMTI_ERROR(error, "Could not get declaring class.");
 
-	char *decName;
+	unsigned char *decName;
 	error= (*jvmti_env)->GetClassSignature(jvmti_env, declaring, &decName, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get class signature.");
 
-	char *name;
+	unsigned char *name;
 	error = (*jvmti_env)->GetMethodName(jvmti_env, method, &name, NULL, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get method name.");
 
 	tracepoint(java_ust, method_exit, decName, name);
-	(*jvmti_env)->Deallocate(name);
-	(*jvmti_env)->Deallocate(decName);
+	(*jvmti_env)->Deallocate(jvmti_env, name);
+	(*jvmti_env)->Deallocate(jvmti_env, decName);
 }
