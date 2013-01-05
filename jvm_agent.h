@@ -5,6 +5,8 @@
  * Created on January 4, 2013, 11:44 PM
  */
 
+#define TRACEPOINT_CREATE_PROBES
+
 #undef TRACEPOINT_PROVIDER
 #define TRACEPOINT_PROVIDER java_ust
 
