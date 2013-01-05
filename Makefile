@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-fPIC
 INCLUDE=-I$(JAVA_HOME)/include -I.
-OBJECTS=build/tp.o build/jvm_agent.o
+OBJECTS=build/jvm_agent.o
 LIBRARY=libLTTng_java.so
 LDFLAGS=-ldl -llttng-ust -L/usr/lib/x86_64-linux-gnu
 
