@@ -23,7 +23,7 @@
 
 #endif /* _TRACEPOINT_JAVA_UST_H */
 
-#undef TRACEPOINT_INCLUDE
-#define TRACEPOINT_INCLUDE "./tracepoints.h"
+#undef TRACEPOINT_INCLUDE_FILE
+#define TRACEPOINT_INCLUDE_FILE ./tracepoints.h
 
 #include <lttng/tracepoint-event.h>
