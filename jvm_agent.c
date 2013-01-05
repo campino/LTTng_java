@@ -2,6 +2,8 @@
 #include "jvm_agent.h"
 
 #define TRACEPOINT_DEFINE
+#define TRACEPOINT_CREATE_PROBES
+#include "tracepoints.h"
 
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	// get jvmti
