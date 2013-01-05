@@ -5,7 +5,21 @@
 #define TRACEPOINT_CREATE_PROBES
 #include "tracepoints.h"
 
+inline void CHECK_JVMTI_ERROR(jvmtiError error, const char *message) {
+	switch(error) {
+		case JVMTI_ERROR_NONE: return;
+		default: {
+			char *str = malloc(20*sizeof(char));
+			snprintf(str, 20, "jvmti error: %d\n", error);
+			fatal_error(str);
+			free(str);
+		}
+	}
+}
+
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
+	jvmtiEnv *jvmti;
+
 	// get jvmti
 	jint res = (*vm)->GetEnv(vm, (void **)&jvmti, JVMTI_VERSION_1_0);
     if (res != JNI_OK) {
@@ -18,7 +32,7 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	capabilities.can_generate_method_entry_events=1;
 	capabilities.can_generate_method_exit_events=1;
 	jvmtiError error = (*jvmti)->AddCapabilities(jvmti, &capabilities);
-    CHECK_JVMTI_ERROR(jvmti, error, "Unable to get necessary JVMTI capabilities.");
+    CHECK_JVMTI_ERROR(error, "Unable to get necessary JVMTI capabilities.");
 
 	// add the callbacks
 	jvmtiEventCallbacks    callbacks;
@@ -78,6 +92,7 @@ void JNICALL cbMethodExit(jvmtiEnv *jvmti_env,
 
 	char *name;
 	error = GetMethodName(jvmti_env, method, &name, NULL, NULL);
+	CHECK_JVMTI_ERROR(error, "Could not get method name.");
 
 	tracepoint(java_ust, method_exit, decName, name);
 	Deallocate(name);

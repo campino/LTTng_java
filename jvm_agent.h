@@ -15,8 +15,6 @@ extern "C" {
 #include <jni.h>
 #include <jvmti.h>
 
-	jvmtiEnv *jvmti;
-
 	JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved);
 	JNIEXPORT void JNICALL Agent_OnUnload(JavaVM *vm);
 
