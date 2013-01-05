@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-fPIC
+CFLAGS=-fPIC -fno-strict-aliasing -fno-omit-frame-pointer -Wall
 INCLUDE=-I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -I.
 OBJECTS=build/jvm_agent.o
 LIBRARY=libLTTng_java.so
