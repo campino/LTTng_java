@@ -8,10 +8,6 @@
 #ifndef JVM_AGENT_H
 #define	JVM_AGENT_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
 #include <jni.h>
 #include <jvmti.h>
 
@@ -29,9 +25,5 @@ extern "C" {
             jmethodID method,
             jboolean was_popped_by_exception,
             jvalue return_value);
-
-#ifdef	__cplusplus
-}
-#endif
 
 #endif	/* JVM_AGENT_H */
