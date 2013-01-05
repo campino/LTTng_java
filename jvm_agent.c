@@ -9,10 +9,8 @@ inline void CHECK_JVMTI_ERROR(jvmtiError error, const char *message) {
 	switch(error) {
 		case JVMTI_ERROR_NONE: return;
 		default: {
-			char *str = malloc(20*sizeof(char));
-			snprintf(str, 20, "jvmti error: %d\n", error);
-			fatal_error(str);
-			free(str);
+			printf("jvmti error: %d\n", error);
+			abort();
 		}
 	}
 }
@@ -23,7 +21,8 @@ JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	// get jvmti
 	jint res = (*vm)->GetEnv(vm, (void **)&jvmti, JVMTI_VERSION_1_0);
     if (res != JNI_OK) {
-		fatal_error("ERROR: Unable to access jvmti");
+		fprintf("ERROR: Unable to access jvmti.");
+		abort();
 	}
 
 	// ask for the capabilities
@@ -61,19 +60,19 @@ void JNICALL cbMethodEntry(jvmtiEnv *jvmti_env,
             jthread thread,
             jmethodID method) {
 	jclass declaring;
-	jvmtiError error = GetMethodDeclaringClass(jvmti_env, method, &declaring);
+	jvmtiError error = (*jvmti_env)->GetMethodDeclaringClass(jvmti_env, method, &declaring);
 	CHECK_JVMTI_ERROR(error, "Could not get declaring class.");
 
 	char *decName;
-	error= GetClassSignature(jvmti_env, declaring, &decName, NULL);
+	error= (*jvmti_env)->GetClassSignature(jvmti_env, declaring, &decName, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get class signature.");
 
 	char *name;
-	error = GetMethodName(jvmti_env, method, &name, NULL, NULL);
+	error = (*jvmti_env)->GetMethodName(jvmti_env, method, &name, NULL, NULL);
 
 	tracepoint(java_ust, method_entry, decName, name);
-	Deallocate(name);
-	Deallocate(decName);
+	(*jvmti_env)->Deallocate(name);
+	(*jvmti_env)->Deallocate(decName);
 }
 
 void JNICALL cbMethodExit(jvmtiEnv *jvmti_env,
@@ -83,18 +82,18 @@ void JNICALL cbMethodExit(jvmtiEnv *jvmti_env,
 		jboolean was_popped_by_exception,
 		jvalue return_value) {
 	jclass declaring;
-	jvmtiError error = GetMethodDeclaringClass(jvmti_env, method, &declaring);
+	jvmtiError error = (*jvmti_env)->GetMethodDeclaringClass(jvmti_env, method, &declaring);
 	CHECK_JVMTI_ERROR(error, "Could not get declaring class.");
 
 	char *decName;
-	error= GetClassSignature(jvmti_env, declaring, &decName, NULL);
+	error= (*jvmti_env)->GetClassSignature(jvmti_env, declaring, &decName, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get class signature.");
 
 	char *name;
-	error = GetMethodName(jvmti_env, method, &name, NULL, NULL);
+	error = (*jvmti_env)->GetMethodName(jvmti_env, method, &name, NULL, NULL);
 	CHECK_JVMTI_ERROR(error, "Could not get method name.");
 
 	tracepoint(java_ust, method_exit, decName, name);
-	Deallocate(name);
-	Deallocate(decName);
+	(*jvmti_env)->Deallocate(name);
+	(*jvmti_env)->Deallocate(decName);
 }
