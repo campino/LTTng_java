@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "jvm_agent.h"
 
+#define TRACEPOINT_DEFINE
+
 JNIEXPORT jint JNICALL Agent_OnLoad(JavaVM *vm, char *options, void *reserved) {
 	// get jvmti
 	jint res = (*vm)->GetEnv(vm, (void **)&jvmti, JVMTI_VERSION_1_0);

@@ -5,18 +5,18 @@
  * Created on January 4, 2013, 11:44 PM
  */
 
-#ifndef JVM_AGENT_H
-#define	JVM_AGENT_H
+#undef TRACEPOINT_PROVIDER
+#define TRACEPOINT_PROVIDER java_ust
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
+	#ifndef JVM_AGENT_H
+	#define	JVM_AGENT_H
+
 	#include <jni.h>
 	#include <jvmti.h>
-
-	#undef TRACEPOINT_PROVIDER
-	#define TRACEPOINT_PROVIDER java_ust
 
 	#include <lttng/tracepoint.h>
 
@@ -25,8 +25,6 @@ extern "C" {
 
 	TRACEPOINT_LOGLEVEL(java_ust, method_entry, TRACE_INFO)
 	TRACEPOINT_LOGLEVEL(java_ust, method_exit, TRACE_INFO)
-
-	#include <lttng/tracepoint-event.h>
 
 	jvmtiEnv *jvmti;
 
@@ -45,10 +43,10 @@ extern "C" {
             jboolean was_popped_by_exception,
             jvalue return_value);
 
+#endif	/* JVM_AGENT_H */
+
+#include <lttng/tracepoint-event.h>
 
 #ifdef	__cplusplus
 }
 #endif
-
-#endif	/* JVM_AGENT_H */
-
