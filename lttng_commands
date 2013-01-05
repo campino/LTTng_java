@@ -1,0 +1,9 @@
+sudo lttng create dbs_project
+
+sudo lttng enable-event -a -u
+
+sudo lttng add-context --kernel -t perf:LLC-load-misses -t perf:LLC-store-misses     -t perf:LLC-prefetch-misses
+
+sudo lttng start
+
+sudo lttng stop
